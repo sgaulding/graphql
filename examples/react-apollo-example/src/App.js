@@ -14,9 +14,22 @@ const GET_DOGS = gql`
 `;
 
 class App extends React.Component {
-  onDogSelected = event => {};
+    constructor(props) {
+        super(props);
+        this.state = {
+            dogImage: ''
+        };
+    }
+
+    onChangeImage(img) {
+        this.setState({
+            dogImage: img
+        });
+    }
 
   render() {
+    const dogImage = this.state.dogImage;
+
     return (
       <Fragment>
         <h1>React Apollo Example</h1>
@@ -30,10 +43,10 @@ class App extends React.Component {
             if (error) return `Error: ${error.message}`;
             return (
               <form>
-                <label>Dog Breed</label>{" "}
-                <select name="dog" onChange={this.onDogSelected}>
+                <label>Dog Breed</label>
+                <select name="dog" onChange={e => {this.onChangeImage(e.target.value)}}>
                   {data.dogs.map(dog => (
-                    <option key={dog.id} value={dog.breed}>
+                    <option key={dog.id} value={dog.displayImage}>
                       {dog.breed}
                     </option>
                   ))}
@@ -42,6 +55,9 @@ class App extends React.Component {
             );
           }}
         </Query>
+          <div>
+            <img src={dogImage} alt='' />
+          </div>
       </Fragment>
     );
   }
